@@ -1,16 +1,51 @@
+import "../global.css";
 import { useEffect, useRef } from "react";
-import { StyleSheet, Text, View, Image, Animated } from "react-native";
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    Animated,
+    Pressable,
+} from "react-native";
+import { Score } from "./Score";
+import { Link } from "expo-router";
 
 export function VideoCard({ video }) {
     return (
-        <View key={video.id} style={styles.card}>
-            <Image source={{ uri: video.img }} style={styles.image} />
-            <Text style={styles.primaryTitle}>{video.primaryTitle}</Text>
-            <Text style={styles.aggregateRating}>
-                {video.aggregateRating}/10
-            </Text>
-            <Text style={styles.plot}>{video.plot}</Text>
-        </View>
+        <Link href={`/${video.primaryTitle}`} asChild>
+            <Pressable>
+                {({ pressed }) => (
+                    <View
+                        key={video.id}
+                        style={{
+                            opacity: pressed ? 0.7 : 1,
+                        }}
+                        className="flex-row bg-slate-800 p-4 rounded-lg mb-10"
+                    >
+                        <Image
+                            source={{ uri: video.img }}
+                            style={styles.image}
+                        />
+                        <View>
+                            <Text className="mb-1" style={styles.primaryTitle}>
+                                {video.primaryTitle}
+                            </Text>
+                            <Score
+                                score={video.aggregateRating}
+                                maxScore={10}
+                            />
+                            <Text
+                                className="mt-2 flex-shrink-0"
+                                style={styles.plot}
+                            >
+                                {video.plot.slice(0, 100)}...
+                            </Text>
+                        </View>
+                    </View>
+                )}
+            </Pressable>
+        </Link>
     );
 }
 
@@ -56,5 +91,6 @@ const styles = StyleSheet.create({
         height: 147,
         width: 107,
         borderRadius: 10,
+        marginRight: 10,
     },
 });
