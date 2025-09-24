@@ -13,7 +13,7 @@ import { Link } from "expo-router";
 
 export function VideoCard({ video }) {
     return (
-        <Link href={`/${video.primaryTitle}`} asChild>
+        <Link href={`/${video.id}`} asChild>
             <Pressable>
                 {({ pressed }) => (
                     <View
@@ -27,7 +27,7 @@ export function VideoCard({ video }) {
                             source={{ uri: video.img }}
                             style={styles.image}
                         />
-                        <View>
+                        <View className="flex-shrink">
                             <Text className="mb-1" style={styles.primaryTitle}>
                                 {video.primaryTitle}
                             </Text>
@@ -36,7 +36,7 @@ export function VideoCard({ video }) {
                                 maxScore={10}
                             />
                             <Text
-                                className="mt-2 flex-shrink-0"
+                                className="mt-2 text-justify"
                                 style={styles.plot}
                             >
                                 {video.plot.slice(0, 100)}...

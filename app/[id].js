@@ -1,14 +1,23 @@
 import { Link, Stack } from "expo-router";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { ScreenLayout } from "../components/ScreenLayout";
-import { use, useEffect } from "react";
+import { use, useEffect, useState } from "react";
+import { getVideoById } from "../lib/metacritic";
+import { Score } from "../components/Score";
+import { Resaltar } from "../components/Resaltar";
 
 export default function Detail() {
     const { id } = useLocalSearchParams();
     const [video, setVideo] = useState({});
 
-    useEffect(() => {}, []);
+    useEffect(() => {
+        if (id) {
+            getVideoById(id).then((data) => {
+                setVideo(data);
+            });
+        }
+    }, [id]);
 
     return (
         <ScreenLayout>
@@ -17,15 +26,49 @@ export default function Detail() {
                     headerStyle: { backgroundColor: "gold" },
                     headerTintColor: "black",
                     headerLeft: () => {},
-                    headerTitle: `${id}`,
+                    headerTitle:
+                        video.primaryTitle === undefined
+                            ? "Loading..."
+                            : `${video.primaryTitle}`,
                     headerRight: () => {},
                 }}
             />
             <View>
-                <Text className="text-white font-bold mb-8 text-2xl">{id}</Text>
-                <Link href="/" className="text-blue-500 mb-4">
-                    Volver Atras
-                </Link>
+                {video === null ? (
+                    <ActivityIndicator size="large" color="#00ff00" />
+                ) : (
+                    <ScrollView>
+                        <View className="justify-center items-center text-center">
+                            <Image
+                                className="mb-4 rounded-lg"
+                                source={{ uri: video.img }}
+                                style={{ width: 300, height: 450 }}
+                            />
+                            <View className="flex-row justify-center content-center">
+                                <Text className="text-white font-bold mb-4 text-2xl mr-4  flex-shrink">
+                                    {video.primaryTitle}
+                                </Text>
+                                <Score
+                                    score={video.aggregateRating}
+                                    maxScore={10}
+                                />
+                            </View>
+                            <Text className="text-white/70 mt-4 text-left text-xl">
+                                Type: <Resaltar>{video.type}</Resaltar>
+                            </Text>
+                            <Text className="text-white/70 text-left text-xl">
+                                Movie Released:{" "}
+                                <Resaltar>{video.startYear}</Resaltar>
+                            </Text>
+                            <Text className="text-white/70 text-left mb-8 text-xl">
+                                Genre: <Resaltar>{video.genre}</Resaltar>
+                            </Text>
+                            <Text className="text-white/70 mt-4 text-left mb-8 text-xl">
+                                {video.plot}
+                            </Text>
+                        </View>
+                    </ScrollView>
+                )}
             </View>
         </ScreenLayout>
     );
