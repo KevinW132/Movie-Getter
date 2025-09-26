@@ -1,7 +1,6 @@
-import { Link, Stack } from "expo-router";
-import { Pressable, Text, View } from "react-native";
+import { Stack } from "expo-router";
+import { View } from "react-native";
 import { Logo } from "../components/Logo";
-import { CircleInfoIcon } from "../components/Icons";
 
 export default function Layout() {
     return (
@@ -10,16 +9,17 @@ export default function Layout() {
                 screenOptions={{
                     headerStyle: { backgroundColor: "black" },
                     headerTintColor: "#f5c518",
-                    headerTitle: "",
                     headerBackButtonMenuEnabled: false,
-                    headerLeftContainerStyle: {
-                        paddingHorizontal: 0,
-                        backgroundColor: "transparent",
-                    },
-                    headerRightContainerStyle: {
-                        paddingHorizontal: 0,
-                        backgroundColor: "transparent",
-                    },
+                    headerTitle: () => <Logo />,
+                    headerBackButtonDisplayMode: "minimal",
+                }}
+            ></Stack>
+            {/* <Stack
+                screenOptions={{
+                    headerStyle: { backgroundColor: "black" },
+                    headerTintColor: "#f5c518",
+                    headerTitle: () => <Logo />,
+                    headerBackButtonMenuEnabled: false,
                     headerLeft: () => <Logo />,
                     headerRight: () => (
                         <Link asChild href="/about">
@@ -29,7 +29,7 @@ export default function Layout() {
                         </Link>
                     ),
                 }}
-            />
+            /> */}
         </View>
     );
 }
